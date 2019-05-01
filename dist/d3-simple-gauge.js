@@ -25,13 +25,13 @@
   function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
   var CONSTANTS = {
-    BAR_WIDTH: 40,
+    BAR_WIDTH: 20,
     CHAR_INSET: 10,
     EASE_TYPE: _d3Ease.easeElastic,
     NEEDLE_ANIMATION_DELAY: 0,
     NEEDLE_ANIMATION_DURATION: 3000,
     NEEDLE_RADIUS: 15,
-    PAD_RAD: 0.05
+    PAD_RAD: 0.002
   };
 
   var percToDeg = function percToDeg(perc) {
@@ -136,14 +136,17 @@
         var thetaRad = percToRad(percent / 2); // half circle
 
         var centerX = 0;
-        var centerY = 0;
-        var topX = centerX - this._length * Math.cos(thetaRad);
-        var topY = centerY - this._length * Math.sin(thetaRad);
+        var centerY = 0; // make the needle butt-ended
+
+        var topXleft = centerX - this._length * Math.cos(thetaRad - 0.015);
+        var topYleft = centerY - this._length * Math.sin(thetaRad - 0.015);
+        var topXright = centerX - this._length * Math.cos(thetaRad + 0.015);
+        var topYright = centerY - this._length * Math.sin(thetaRad + 0.015);
         var leftX = centerX - this._radius * Math.cos(thetaRad - halfPI);
         var leftY = centerY - this._radius * Math.sin(thetaRad - halfPI);
         var rightX = centerX - this._radius * Math.cos(thetaRad + halfPI);
         var rightY = centerY - this._radius * Math.sin(thetaRad + halfPI);
-        return "M ".concat(leftX, " ").concat(leftY, " L ").concat(topX, " ").concat(topY, " L ").concat(rightX, " ").concat(rightY);
+        return "M ".concat(leftX, " ").concat(leftY, " L ").concat(topXleft, " ").concat(topYleft, " L ").concat(topXright, " ").concat(topYright, " L ").concat(rightX, " ").concat(rightY);
       }
     }]);
 
@@ -287,7 +290,7 @@
           color: this._needleColor,
           easeType: this._easeType,
           el: this._chart,
-          length: this._height * 0.5,
+          length: this._height * 0.9,
           percent: this._percent,
           radius: this._needleRadius
         });

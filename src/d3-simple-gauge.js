@@ -18,17 +18,17 @@ import { scaleLinear } from 'd3-scale';
 import { select } from 'd3-selection';
 
 const CONSTANTS = {
-  BAR_WIDTH: 40,
+  BAR_WIDTH: 20,
   CHAR_INSET: 10,
   EASE_TYPE: easeElastic,
   NEEDLE_ANIMATION_DELAY: 0,
   NEEDLE_ANIMATION_DURATION: 3000,
   NEEDLE_RADIUS: 15,
-  PAD_RAD: 0.05
+  PAD_RAD: 0.002
 };
 
 const percToDeg = perc => perc * 360;
-const degToRad = deg => (deg * Math.PI) / 180;
+const degToRad  = deg  => (deg * Math.PI) / 180;
 const percToRad = perc => degToRad(percToDeg(perc));
 
 /**
@@ -120,19 +120,21 @@ class Needle {
     const halfPI = Math.PI / 2;
     const thetaRad = percToRad(percent / 2); // half circle
 
-    const centerX = 0;
-    const centerY = 0;
+    const centerX   = 0;
+    const centerY   = 0;
 
-    const topX = centerX - (this._length * Math.cos(thetaRad));
-    const topY = centerY - (this._length * Math.sin(thetaRad));
+    // make the needle butt-ended
+    const topXleft  = centerX - ( this._length * Math.cos(thetaRad - 0.015 ) );
+    const topYleft  = centerY - ( this._length * Math.sin(thetaRad - 0.015 ) );
+    const topXright = centerX - ( this._length * Math.cos(thetaRad + 0.015 ) );
+    const topYright = centerY - ( this._length * Math.sin(thetaRad + 0.015 ) );
 
-    const leftX = centerX - (this._radius * Math.cos(thetaRad - halfPI));
-    const leftY = centerY - (this._radius * Math.sin(thetaRad - halfPI));
+    const leftX     = centerX - ( this._radius * Math.cos(thetaRad - halfPI) );
+    const leftY     = centerY - ( this._radius * Math.sin(thetaRad - halfPI) );
+    const rightX    = centerX - ( this._radius * Math.cos(thetaRad + halfPI) );
+    const rightY    = centerY - ( this._radius * Math.sin(thetaRad + halfPI) );
 
-    const rightX = centerX - (this._radius * Math.cos(thetaRad + halfPI));
-    const rightY = centerY - (this._radius * Math.sin(thetaRad + halfPI));
-
-    return `M ${leftX} ${leftY} L ${topX} ${topY} L ${rightX} ${rightY}`;
+    return `M ${leftX} ${leftY} L ${topXleft} ${topYleft} L ${topXright} ${topYright} L ${rightX} ${rightY}`;
   }
 }
 
@@ -334,7 +336,7 @@ export class SimpleGauge {
       color: this._needleColor,
       easeType: this._easeType,
       el: this._chart,
-      length: this._height * 0.5,
+      length: this._height * 0.9,
       percent: this._percent,
       radius: this._needleRadius
     });
