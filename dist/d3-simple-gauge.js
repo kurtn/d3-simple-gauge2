@@ -221,7 +221,7 @@
         throw new RangeError('The needle radius must be greater or equal to 0.');
       }
 
-      if (config.sectionsColors !== undefined && config.sectionsColors.length !== config.sectionsCount) {
+      if (config.sectionsColors !== undefined && config.sectionsColors.length > config.sectionsCount) {
         throw new RangeError('The sectionsColors length must match with the sectionsCount.');
       }
 
