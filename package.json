@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/antoinebeland/d3-simple-gauge.git"
+    "url": "git+https://github.com/kurtn/d3-simple-gauge2"
   },
   "keywords": [
     "gauge",
@@ -20,9 +20,9 @@
   "author": "Antoine Béland",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/antoinebeland/d3-simple-gauge/issues"
+    "url": "https://github.com/kurtn/d3-simple-gauge2/issues"
   },
-  "homepage": "https://github.com/antoinebeland/d3-simple-gauge#readme",
+  "homepage": "https://github.com/kurtn/d3-simple-gauge2#readme",
   "dependencies": {
     "d3-array": "^2.0.3",
     "d3-ease": "^1.0.5",
