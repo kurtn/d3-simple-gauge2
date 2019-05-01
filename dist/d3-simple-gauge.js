@@ -284,13 +284,14 @@
           });
         }
 
+        console.log(this._chartInset);
         this._needle = new Needle({
           animationDelay: this._animationDelay,
           animationDuration: this._animationDuration,
           color: this._needleColor,
           easeType: this._easeType,
           el: this._chart,
-          length: this._height * 0.9,
+          length: (this._height - this._chartInset * 1.2) * 0.9,
           percent: this._percent,
           radius: this._needleRadius
         });
