@@ -302,8 +302,8 @@ export class SimpleGauge {
         const arc = d3Arc()
           .outerRadius(radius - this._chartInset)
           .innerRadius(radius - this._chartInset - this._barWidth)
-          .startAngle(arcStartRad + startPadRad)
-          .endAngle(arcEndRad - endPadRad);
+          .startAngle(arcStartRad)
+          .endAngle(arcEndRad);
 
         return arc(this);
       });
