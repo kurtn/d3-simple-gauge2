@@ -297,13 +297,14 @@ export class SimpleGauge {
         const arcEndRad = arcStartRad + percToRad(sectionPercentage);
         totalPercent += sectionPercentage;
 
-        const startPadRad = sectionIndex === 0 ? 0 : padRad / 2;
-        const endPadRad = sectionIndex === this._sectionsCount ? 0 : padRad / 2;
+        //const startPadRad = sectionIndex === 0 ? 0 : padRad / 2;
+        //const endPadRad = sectionIndex === this._sectionsCount ? 0 : padRad / 2;
+        
         const arc = d3Arc()
           .outerRadius(radius - this._chartInset)
           .innerRadius(radius - this._chartInset - this._barWidth)
-          .startAngle(arcStartRad)
-          .endAngle(arcEndRad);
+          .startAngle(arcStartRad  - 0.0008)
+          .endAngle(arcEndRad  + 0.0008);
 
         return arc(this);
       });

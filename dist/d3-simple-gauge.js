@@ -283,10 +283,10 @@
         }).attr('d', function (sectionIndex) {
           var arcStartRad = percToRad(totalPercent);
           var arcEndRad = arcStartRad + percToRad(sectionPercentage);
-          totalPercent += sectionPercentage;
-          var startPadRad = sectionIndex === 0 ? 0 : padRad / 2;
-          var endPadRad = sectionIndex === _this._sectionsCount ? 0 : padRad / 2;
-          var arc = (0, _d3Shape.arc)().outerRadius(radius - _this._chartInset).innerRadius(radius - _this._chartInset - _this._barWidth).startAngle(arcStartRad).endAngle(arcEndRad);
+          totalPercent += sectionPercentage; //const startPadRad = sectionIndex === 0 ? 0 : padRad / 2;
+          //const endPadRad = sectionIndex === this._sectionsCount ? 0 : padRad / 2;
+
+          var arc = (0, _d3Shape.arc)().outerRadius(radius - _this._chartInset).innerRadius(radius - _this._chartInset - _this._barWidth).startAngle(arcStartRad - 0.0008).endAngle(arcEndRad + 0.0008);
           return arc(_this);
         });
 
