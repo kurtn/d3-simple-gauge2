@@ -47,27 +47,27 @@
     return degToRad(percToDeg(perc));
   };
   /**
-   * Defines the needle used in the gauge.
-   */
+  * Defines the needle used in the gauge.
+  */
 
 
   var Needle =
   /*#__PURE__*/
   function () {
     /**
-     * Initializes a new instance of the Needle class.
-     *
-     * @param config                      The configuration to use to initialize the needle.
-     * @param config.animationDelay       The delay in ms before to start the needle animation.
-     * @param config.animationDuration    The duration in ms of the needle animation.
-     * @param config.color                The color to use for the needle.
-     * @param config.easeType             The ease type to use for the needle animation.
-     * @param config.el                   The parent element of the needle.
-     * @param config.kpi                  The defined gauge kpi percentage limit.
-     * @param config.length               The length of the needle.
-     * @param config.percent              The initial percentage to use.
-     * @param config.radius               The radius of the needle.
-     */
+    * Initializes a new instance of the Needle class.
+    *
+    * @param config                      The configuration to use to initialize the needle.
+    * @param config.animationDelay       The delay in ms before to start the needle animation.
+    * @param config.animationDuration    The duration in ms of the needle animation.
+    * @param config.color                The color to use for the needle.
+    * @param config.easeType             The ease type to use for the needle animation.
+    * @param config.el                   The parent element of the needle.
+    * @param config.kpi                  The defined gauge kpi percentage limit.
+    * @param config.length               The length of the needle.
+    * @param config.percent              The initial percentage to use.
+    * @param config.radius               The radius of the needle.
+    */
     function Needle(config) {
       _classCallCheck(this, Needle);
 
@@ -84,10 +84,10 @@
       this._initialize();
     }
     /**
-     * Updates the needle position based on the percentage specified.
-     *
-     * @param percent      The percentage to use.
-     */
+    * Updates the needle position based on the percentage specified.
+    *
+    * @param percent      The percentage to use.
+    */
 
 
     _createClass(Needle, [{
@@ -112,10 +112,10 @@
         });
       }
       /**
-       * Initializes the needle.
-       *
-       * @private
-       */
+      * Initializes the needle.
+      *
+      * @private
+      */
 
     }, {
       key: "_initialize",
@@ -133,12 +133,12 @@
         }
       }
       /**
-       * Gets the needle path based on the percent specified.
-       *
-       * @param percent       The percentage to use to create the path.
-       * @returns {string}    A string associated with the path.
-       * @private
-       */
+      * Gets the needle path based on the percent specified.
+      *
+      * @param percent       The percentage to use to create the path.
+      * @returns {string}    A string associated with the path.
+      * @private
+      */
 
     }, {
       key: "_getPath",
@@ -164,35 +164,35 @@
     return Needle;
   }();
   /**
-   * Defines a simple gauge.
-   */
+  * Defines a simple gauge.
+  */
 
 
   var SimpleGauge =
   /*#__PURE__*/
   function () {
     /**
-     * Initializes a new instance of the SimpleGauge class.
-     *
-     * @param config                        The configuration to use to initialize the gauge.
-     * @param [config.animationDelay]       The delay in ms before to start the needle animation. By default, the value
-     *                                      is 0.
-     * @param [config.animationDuration]    The duration in ms of the needle animation. By default, the value is 3000.
-     * @param [config.barWidth]             The bar width of the gauge. By default, the value is 40.
-     * @param [config.chartInset]           The char inset to use. By default, the value is 10.
-     * @param [config.easeType]             The ease type to use for the needle animation. By default, the value is
-     *                                      "d3.easeElastic".
-     * @param config.el                     The D3 element to use to create the gauge (must be a group or an SVG element).
-     * @param config.height                 The height of the gauge.
-     * @param [config.interval]             The interval (min and max values) of the gauge. By default, the interval
-     *                                      ia [0, 1].
-     * @param [config.needleColor]          The needle color.
-     * @param [config.needleRadius]         The radius of the needle. By default, the radius is 15.
-     * @param [config.percent]              The percentage to use for the needle position. By default, the value is 0.
-     * @param config.sectionsCount          The number of sections in the gauge.
-     * @param [config.sectionsColors]       The color to use for each section.
-     * @param config.width                  The width of the gauge.
-     */
+    * Initializes a new instance of the SimpleGauge class.
+    *
+    * @param config                        The configuration to use to initialize the gauge.
+    * @param [config.animationDelay]       The delay in ms before to start the needle animation. By default, the value
+    *                                      is 0.
+    * @param [config.animationDuration]    The duration in ms of the needle animation. By default, the value is 3000.
+    * @param [config.barWidth]             The bar width of the gauge. By default, the value is 40.
+    * @param [config.chartInset]           The char inset to use. By default, the value is 10.
+    * @param [config.easeType]             The ease type to use for the needle animation. By default, the value is
+    *                                      "d3.easeElastic".
+    * @param config.el                     The D3 element to use to create the gauge (must be a group or an SVG element).
+    * @param config.height                 The height of the gauge.
+    * @param [config.interval]             The interval (min and max values) of the gauge. By default, the interval
+    *                                      ia [0, 1].
+    * @param [config.needleColor]          The needle color.
+    * @param [config.needleRadius]         The radius of the needle. By default, the radius is 15.
+    * @param [config.percent]              The percentage to use for the needle position. By default, the value is 0.
+    * @param config.sectionsCount          The number of sections in the gauge.
+    * @param [config.sectionsColors]       The color to use for each section.
+    * @param config.width                  The width of the gauge.
+    */
     function SimpleGauge(config) {
       _classCallCheck(this, SimpleGauge);
 
@@ -255,20 +255,20 @@
       this._initialize();
     }
     /**
-     * Gets the interval of the gauge.
-     *
-     * @returns {Array}   An array of two elements that represents the min and the max values of the gauge.
-     */
+    * Gets the interval of the gauge.
+    *
+    * @returns {Array}   An array of two elements that represents the min and the max values of the gauge.
+    */
 
 
     _createClass(SimpleGauge, [{
       key: "_initialize",
 
       /**
-       * Initializes the simple gauge.
-       *
-       * @private
-       */
+      * Initializes the simple gauge.
+      *
+      * @private
+      */
       value: function _initialize() {
         var _this = this;
 
@@ -278,11 +278,12 @@
 
         var radius = Math.min(this._width, this._height * 2) / 2;
         this._chart = this._el.append('g').attr('transform', "translate(".concat(this._width / 2, ", ").concat(this._height, ")"));
-        this._arcs = this._chart.selectAll('.arc').data((0, _d3Array.range)(1, this._sectionsCount + 1)).enter().append('path').attr('class', function (sectionIndex) {
+        this._arcs = this._chart.selectAll('.arc').data((0, _d3Array.range)(1, this._sectionsCount)).enter().append('path').attr('class', function (sectionIndex) {
           return "arc chart-color".concat(sectionIndex);
         }).attr('d', function (sectionIndex) {
           var arcStartRad = percToRad(totalPercent);
           var arcEndRad = arcStartRad + percToRad(sectionPercentage);
+          console.log('arcEndRad: ' + arcEndRad);
           totalPercent += sectionPercentage; //const startPadRad = sectionIndex === 0 ? 0 : padRad / 2;
           //const endPadRad = sectionIndex === this._sectionsCount ? 0 : padRad / 2;
 
@@ -311,10 +312,10 @@
         this._update();
       }
       /**
-       * Updates the active arc and the gauge status (min or max) based on the current percent.
-       *
-       * @private
-       */
+      * Updates the active arc and the gauge status (min or max) based on the current percent.
+      *
+      * @private
+      */
 
     }, {
       key: "_update",
@@ -324,6 +325,8 @@
         if (!this._arcs) {
           return;
         }
+
+        console.log(this._arcs);
 
         this._arcs.classed('active', function (d, i) {
           return i === Math.floor(_this2._percent * _this2._sectionsCount) || i === _this2._arcs.size() - 1 && _this2._percent === 1;
@@ -337,12 +340,13 @@
       key: "interval",
       get: function get() {
         return this._scale.domain();
+        console.log('jippi');
       }
       /**
-       * Sets the interval of the gauge (min and max values).
-       *
-       * @param interval
-       */
+      * Sets the interval of the gauge (min and max values).
+      *
+      * @param interval
+      */
       ,
       set: function set(interval) {
         if (!(interval instanceof Array) || interval.length !== 2 || isNaN(interval[0]) || isNaN(interval[1]) || interval[0] > interval[1]) {
@@ -352,10 +356,10 @@
         this._scale = (0, _d3Scale.scaleLinear)().domain(interval).range([0, 1]).clamp(true);
       }
       /**
-       * Gets the needle percent.
-       *
-       * @returns {number|*}    The percentage position of the needle.
-       */
+      * Gets the needle percent.
+      *
+      * @returns {number|*}    The percentage position of the needle.
+      */
 
     }, {
       key: "percent",
@@ -363,10 +367,10 @@
         return this._percent;
       }
       /**
-       * Sets the needle percent. The percent must be between 0 and 1.
-       *
-       * @param percent         The percentage to set.
-       */
+      * Sets the needle percent. The percent must be between 0 and 1.
+      *
+      * @param percent         The percentage to set.
+      */
       ,
       set: function set(percent) {
         if (isNaN(percent) || percent < 0 || percent > 1) {
@@ -382,12 +386,12 @@
         this._update();
       }
       /**
-       * Sets the needle position based on the specified value inside the interval.
-       * If the value specified is outside the interval, the value will be
-       * clamped to fit inside the domain.
-       *
-       * @param value           The value to use to set the needle position.
-       */
+      * Sets the needle position based on the specified value inside the interval.
+      * If the value specified is outside the interval, the value will be
+      * clamped to fit inside the domain.
+      *
+      * @param value           The value to use to set the needle position.
+      */
 
     }, {
       key: "value",
