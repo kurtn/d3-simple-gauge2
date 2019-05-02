@@ -95,7 +95,7 @@
       value: function update(percent) {
         var self = this; // change color if needle (data) is below kpi
 
-        if (this._kpi / 100 > percent) var color = 'rgba(0, 172, 0, 1)';else var color = 'rgba(172, 0, 0, 1)';
+        if (this._kpi / 100 >= percent) var color = 'rgba(0, 172, 0, 1)';else var color = 'rgba(172, 0, 0, 1)';
 
         this._el.select('.needle-center').style('fill', color);
 
@@ -124,7 +124,7 @@
 
         this._el.append('path').attr('class', 'needle').attr('d', this._getPath(this._percent));
 
-        if (this._kpi / 100 > this._percent) this._color = 'rgba(0, 172, 0, 1)';else this._color = 'rgba(172, 0, 0, 1)';
+        if (this._kpi / 100 >= this._percent) this._color = 'rgba(0, 172, 0, 1)';else this._color = 'rgba(172, 0, 0, 1)';
 
         if (this._color) {
           this._el.select('.needle-center').style('fill', this._color);
