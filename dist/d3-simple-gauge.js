@@ -100,6 +100,9 @@
 
         this._el.select('.needle').style('fill', color);
 
+        console.log(this._kpi);
+        console.log(percent);
+
         this._el.transition().delay(this._animationDelay).ease(this._easeType).duration(this._animationDuration).selectAll('.needle').tween('progress', function () {
           var thisElement = this;
           var delta = percent - self._percent;

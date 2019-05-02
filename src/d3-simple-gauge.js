@@ -69,11 +69,16 @@ class Needle {
    */
   update(percent) {
     const self = this;
+
     // change color if needle (data) is below kpi
     if( (this._kpi / 100) > percent) var color = 'rgba(0, 172, 0, 1)';
     else                             var color = 'rgba(172, 0, 0, 1)';
     this._el.select('.needle-center').style('fill', color);
     this._el.select('.needle').style('fill', color);
+    
+    console.log(this._kpi);
+    console.log(percent);
+
     this._el.transition()
       .delay(this._animationDelay)
       .ease(this._easeType)
