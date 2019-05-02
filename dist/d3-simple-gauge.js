@@ -31,8 +31,8 @@
     NEEDLE_ANIMATION_DELAY: 0,
     NEEDLE_ANIMATION_DURATION: 3000,
     NEEDLE_RADIUS: 15,
-    PAD_RAD: -0.001,
-    KPI: 47
+    PAD_RAD: -0.002,
+    KPI: 25
   };
 
   var percToDeg = function percToDeg(perc) {
