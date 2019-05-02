@@ -32,7 +32,7 @@
     NEEDLE_ANIMATION_DURATION: 3000,
     NEEDLE_RADIUS: 15,
     PAD_RAD: 0.002,
-    KPI: 50
+    KPI: 47
   };
 
   var percToDeg = function percToDeg(perc) {
@@ -63,6 +63,7 @@
      * @param config.color                The color to use for the needle.
      * @param config.easeType             The ease type to use for the needle animation.
      * @param config.el                   The parent element of the needle.
+     * @param config.kpi                  The defined gauge kpi percentage limit.
      * @param config.length               The length of the needle.
      * @param config.percent              The initial percentage to use.
      * @param config.radius               The radius of the needle.
@@ -75,7 +76,7 @@
       this._color = config.color;
       this._easeType = config.easeType;
       this._el = config.el;
-      this._kpi = config.kpi !== undefined ? config.kpi : 50;
+      this._kpi = config.kpi;
       this._length = config.length;
       this._percent = config.percent;
       this._radius = config.radius;
@@ -100,9 +101,6 @@
 
         this._el.select('.needle').style('fill', color);
 
-        console.log(this._kpi);
-        console.log(percent);
-
         this._el.transition().delay(this._animationDelay).ease(this._easeType).duration(this._animationDuration).selectAll('.needle').tween('progress', function () {
           var thisElement = this;
           var delta = percent - self._percent;
@@ -125,6 +123,8 @@
         this._el.append('circle').attr('class', 'needle-center').attr('cx', 0).attr('cy', 0).attr('r', this._radius);
 
         this._el.append('path').attr('class', 'needle').attr('d', this._getPath(this._percent));
+
+        if (this._kpi / 100 > this._percent) this._color = 'rgba(0, 172, 0, 1)';else this._color = 'rgba(172, 0, 0, 1)';
 
         if (this._color) {
           this._el.select('.needle-center').style('fill', this._color);
@@ -248,7 +248,7 @@
       this._width = config.width;
       this._sectionsColors = config.sectionsColors;
       this._needleColor = config.needleColor;
-      this._kpi = config.kpi !== undefined ? config.kpi : CONSTANTS.KPI;
+      this._kpi = config.kpi;
       this.interval = config.interval || [0, 1];
       this.percent = config.percent !== undefined ? config.percent : 0;
 
@@ -296,13 +296,13 @@
           });
         }
 
-        console.log(this._chartInset);
         this._needle = new Needle({
           animationDelay: this._animationDelay,
           animationDuration: this._animationDuration,
           color: this._needleColor,
           easeType: this._easeType,
           el: this._chart,
+          kpi: this._kpi,
           length: (this._height - this._chartInset * 1.2) * 0.9,
           percent: this._percent,
           radius: this._needleRadius
