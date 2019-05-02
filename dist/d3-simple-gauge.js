@@ -31,7 +31,8 @@
     NEEDLE_ANIMATION_DELAY: 0,
     NEEDLE_ANIMATION_DURATION: 3000,
     NEEDLE_RADIUS: 15,
-    PAD_RAD: 0.002
+    PAD_RAD: 0.002,
+    KPI: 50
   };
 
   var percToDeg = function percToDeg(perc) {
@@ -74,6 +75,7 @@
       this._color = config.color;
       this._easeType = config.easeType;
       this._el = config.el;
+      this._kpi = config.kpi !== undefined ? config.kpi : 50;
       this._length = config.length;
       this._percent = config.percent;
       this._radius = config.radius;
@@ -90,7 +92,13 @@
     _createClass(Needle, [{
       key: "update",
       value: function update(percent) {
-        var self = this;
+        var self = this; // change color if needle (data) is below kpi
+
+        if (this._kpi / 100 > percent) var color = 'rgba(0, 172, 0, 1)';else var color = 'rgba(172, 0, 0, 1)';
+
+        this._el.select('.needle-center').style('fill', color);
+
+        this._el.select('.needle').style('fill', color);
 
         this._el.transition().delay(this._animationDelay).ease(this._easeType).duration(this._animationDuration).selectAll('.needle').tween('progress', function () {
           var thisElement = this;
@@ -237,6 +245,7 @@
       this._width = config.width;
       this._sectionsColors = config.sectionsColors;
       this._needleColor = config.needleColor;
+      this._kpi = config.kpi !== undefined ? config.kpi : CONSTANTS.KPI;
       this.interval = config.interval || [0, 1];
       this.percent = config.percent !== undefined ? config.percent : 0;
 

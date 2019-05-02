@@ -24,7 +24,8 @@ const CONSTANTS = {
   NEEDLE_ANIMATION_DELAY: 0,
   NEEDLE_ANIMATION_DURATION: 3000,
   NEEDLE_RADIUS: 15,
-  PAD_RAD: 0.002
+  PAD_RAD: 0.002,
+  KPI: 50
 };
 
 const percToDeg = perc => perc * 360;
@@ -54,6 +55,7 @@ class Needle {
     this._color = config.color;
     this._easeType = config.easeType;
     this._el = config.el;
+    this._kpi = (config.kpi !== undefined) ? config.kpi : 50;
     this._length = config.length;
     this._percent = config.percent;
     this._radius = config.radius;
@@ -67,6 +69,11 @@ class Needle {
    */
   update(percent) {
     const self = this;
+    // change color if needle (data) is below kpi
+    if( (this._kpi / 100) > percent) var color = 'rgba(0, 172, 0, 1)';
+    else                             var color = 'rgba(172, 0, 0, 1)';
+    this._el.select('.needle-center').style('fill', color);
+    this._el.select('.needle').style('fill', color);
     this._el.transition()
       .delay(this._animationDelay)
       .ease(this._easeType)
@@ -165,63 +172,33 @@ export class SimpleGauge {
    * @param config.width                  The width of the gauge.
    */
   constructor(config) {
-    if (!config.el) {
-      throw new Error('The element must be valid.');
-    }
-    if (isNaN(config.height) || config.height <= 0) {
-      throw new RangeError('The height must be a positive number.');
-    }
-    if (isNaN(config.sectionsCount) || config.sectionsCount <= 0) {
-      throw new RangeError('The sections count must be a positive number.');
-    }
-    if (isNaN(config.width) || config.width <= 0) {
-      throw new RangeError('The width must be a positive number.');
-    }
-    if (config.animationDelay !== undefined && (isNaN(config.animationDelay)
-      || config.animationDelay < 0)) {
-      throw new RangeError('The transition delay must be greater or equal to 0.');
-    }
-    if (config.animationDuration !== undefined && (isNaN(config.animationDuration)
-      || config.animationDuration < 0)) {
-      throw new RangeError('The transition duration must be greater or equal to 0.');
-    }
-    if (config.barWidth !== undefined && (isNaN(config.barWidth) || config.barWidth <= 0)) {
-      throw new RangeError('The bar width must be a positive number.');
-    }
-    if (config.chartInset !== undefined && (isNaN(config.chartInset) || config.chartInset < 0)) {
-      throw new RangeError('The chart inset must be greater or equal to 0.');
-    }
-    if (config.needleRadius !== undefined && (isNaN(config.needleRadius) || config.needleRadius < 0)) {
-      throw new RangeError('The needle radius must be greater or equal to 0.');
-    }
-    if (config.sectionsColors !== undefined && config.sectionsColors.length < config.sectionsCount) {
-      throw new RangeError('The sectionsColors length must match with the sectionsCount.');
-    }
 
-    this._animationDelay = (config.animationDelay !== undefined)
-      ? config.animationDelay
-      : CONSTANTS.NEEDLE_ANIMATION_DELAY;
+    if (!config.el)                                                                                                  { throw new Error('The element must be valid.');                                        }
+    if (isNaN(config.height) || config.height <= 0)                                                                  { throw new RangeError('The height must be a positive number.');                        }
+    if (isNaN(config.sectionsCount) || config.sectionsCount <= 0)                                                    { throw new RangeError('The sections count must be a positive number.');                }
+    if (isNaN(config.width) || config.width <= 0)                                                                    { throw new RangeError('The width must be a positive number.');                         }
+    if (config.animationDelay !== undefined && (isNaN(config.animationDelay) || config.animationDelay < 0))          { throw new RangeError('The transition delay must be greater or equal to 0.');          }
+    if (config.animationDuration !== undefined && (isNaN(config.animationDuration) || config.animationDuration < 0)) { throw new RangeError('The transition duration must be greater or equal to 0.');       }
+    if (config.barWidth !== undefined && (isNaN(config.barWidth) || config.barWidth <= 0))                           { throw new RangeError('The bar width must be a positive number.');                     }
+    if (config.chartInset !== undefined && (isNaN(config.chartInset) || config.chartInset < 0))                      { throw new RangeError('The chart inset must be greater or equal to 0.');               }
+    if (config.needleRadius !== undefined && (isNaN(config.needleRadius) || config.needleRadius < 0))                { throw new RangeError('The needle radius must be greater or equal to 0.');             }
+    if (config.sectionsColors !== undefined && config.sectionsColors.length < config.sectionsCount)                  { throw new RangeError('The sectionsColors length must match with the sectionsCount.'); }
 
-    this._animationDuration = (config.animationDuration !== undefined)
-      ? config.animationDuration
-      : CONSTANTS.NEEDLE_ANIMATION_DURATION;
-
-    this._chartInset = (config.chartInset !== undefined)
-      ? config.chartInset
-      : CONSTANTS.CHAR_INSET;
-
-    this._barWidth = config.barWidth || CONSTANTS.BAR_WIDTH;
-    this._easeType = config.easeType || CONSTANTS.EASE_TYPE;
-    this._el = config.el;
-    this._height = config.height;
-    this._needleRadius = (config.needleRadius !== undefined) ? config.needleRadius : CONSTANTS.NEEDLE_RADIUS;
-    this._sectionsCount = config.sectionsCount;
-    this._width = config.width;
-    this._sectionsColors = config.sectionsColors;
-    this._needleColor = config.needleColor;
-
-    this.interval = config.interval || [0, 1];
-    this.percent = (config.percent !== undefined) ? config.percent : 0;
+    this._animationDelay    = (config.animationDelay !== undefined)    ? config.animationDelay    : CONSTANTS.NEEDLE_ANIMATION_DELAY;
+    this._animationDuration = (config.animationDuration !== undefined) ? config.animationDuration : CONSTANTS.NEEDLE_ANIMATION_DURATION;
+    this._chartInset        = (config.chartInset !== undefined)        ? config.chartInset        : CONSTANTS.CHAR_INSET;
+    this._barWidth          = config.barWidth || CONSTANTS.BAR_WIDTH;
+    this._easeType          = config.easeType || CONSTANTS.EASE_TYPE;
+    this._el                = config.el;
+    this._height            = config.height;
+    this._needleRadius      = (config.needleRadius !== undefined) ? config.needleRadius : CONSTANTS.NEEDLE_RADIUS;
+    this._sectionsCount     = config.sectionsCount;
+    this._width             = config.width;
+    this._sectionsColors    = config.sectionsColors;
+    this._needleColor       = config.needleColor;
+    this._kpi               = (config.kpi !== undefined) ? config.kpi : CONSTANTS.KPI;
+    this.interval           = config.interval || [0, 1];
+    this.percent            = (config.percent !== undefined) ? config.percent : 0;
 
     this._initialize();
   }
