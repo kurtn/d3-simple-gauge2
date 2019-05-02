@@ -114,10 +114,14 @@ class Needle {
     else                             this._color = 'rgba(172, 0, 0, 1)';
     if (this._color) {
       this._el.select('.needle-center')
-        .style('fill', this._color);
+        .attr('border', 1)
+        .style('fill', this._color)
+        .style('stroke', 'black');
 
       this._el.select('.needle')
-        .style('fill', this._color);
+        .attr('border', 1)
+        .style('fill', this._color)
+        .style('stroke', 'black');
     }
   }
 
@@ -136,10 +140,10 @@ class Needle {
     const centerY   = 0;
 
     // make the needle butt-ended
-    const topXleft  = centerX - ( this._length * Math.cos(thetaRad - 0.015 ) );
-    const topYleft  = centerY - ( this._length * Math.sin(thetaRad - 0.015 ) );
-    const topXright = centerX - ( this._length * Math.cos(thetaRad + 0.015 ) );
-    const topYright = centerY - ( this._length * Math.sin(thetaRad + 0.015 ) );
+    const topXleft  = centerX - ( this._length * Math.cos(thetaRad - 0.01 ) );
+    const topYleft  = centerY - ( this._length * Math.sin(thetaRad - 0.01 ) );
+    const topXright = centerX - ( this._length * Math.cos(thetaRad + 0.01 ) );
+    const topYright = centerY - ( this._length * Math.sin(thetaRad + 0.01 ) );
 
     const leftX     = centerX - ( this._radius * Math.cos(thetaRad - halfPI) );
     const leftY     = centerY - ( this._radius * Math.sin(thetaRad - halfPI) );
@@ -299,13 +303,13 @@ export class SimpleGauge {
 
         //const startPadRad = sectionIndex === 0 ? 0 : padRad / 2;
         //const endPadRad = sectionIndex === this._sectionsCount ? 0 : padRad / 2;
-        
+
         const arc = d3Arc()
           .outerRadius(radius - this._chartInset)
           .innerRadius(radius - this._chartInset - this._barWidth)
           .startAngle(arcStartRad  - 0.0008)
           .endAngle(arcEndRad  + 0.0008);
-
+          
         return arc(this);
       });
 

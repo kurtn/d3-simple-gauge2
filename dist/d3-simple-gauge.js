@@ -127,9 +127,9 @@
         if (this._kpi / 100 >= this._percent) this._color = 'rgba(0, 172, 0, 1)';else this._color = 'rgba(172, 0, 0, 1)';
 
         if (this._color) {
-          this._el.select('.needle-center').style('fill', this._color);
+          this._el.select('.needle-center').attr('border', 1).style('fill', this._color).style('stroke', 'black');
 
-          this._el.select('.needle').style('fill', this._color);
+          this._el.select('.needle').attr('border', 1).style('fill', this._color).style('stroke', 'black');
         }
       }
       /**
@@ -149,10 +149,10 @@
         var centerX = 0;
         var centerY = 0; // make the needle butt-ended
 
-        var topXleft = centerX - this._length * Math.cos(thetaRad - 0.015);
-        var topYleft = centerY - this._length * Math.sin(thetaRad - 0.015);
-        var topXright = centerX - this._length * Math.cos(thetaRad + 0.015);
-        var topYright = centerY - this._length * Math.sin(thetaRad + 0.015);
+        var topXleft = centerX - this._length * Math.cos(thetaRad - 0.01);
+        var topYleft = centerY - this._length * Math.sin(thetaRad - 0.01);
+        var topXright = centerX - this._length * Math.cos(thetaRad + 0.01);
+        var topYright = centerY - this._length * Math.sin(thetaRad + 0.01);
         var leftX = centerX - this._radius * Math.cos(thetaRad - halfPI);
         var leftY = centerY - this._radius * Math.sin(thetaRad - halfPI);
         var rightX = centerX - this._radius * Math.cos(thetaRad + halfPI);

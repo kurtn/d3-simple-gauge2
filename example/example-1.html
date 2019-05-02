@@ -46,11 +46,24 @@
 <script type="text/javascript" src="../node_modules/d3/dist/d3.min.js"></script>
 <script type="text/javascript" src="../dist/d3-simple-gauge.js"></script>
 <script>
-  const svg = d3.select('body > article')
-    .append('svg')
-    .attr('width', 400)
-    .attr('height', 250);
-    
+
+    var w = 500;
+    var h = 250;
+    var border=1;
+    var bordercolor='black';
+    const svg = d3.select('body > article')
+                  .append('svg')
+                  .attr('width', w)
+                  .attr('height', h)
+                  .attr("border",border);
+    var borderPath = svg.append("rect")
+                        .attr("x", 0)
+                        .attr("y", 0)
+                        .attr("width", w)
+                        .attr("height", h)
+                        .style("stroke", bordercolor)
+                        .style("fill", "none")
+                        .style("stroke-width", border);
 var kpi_value = 18;
 
 function PercentageToSections(perc) {
@@ -67,35 +80,35 @@ function PercentageToColors(perc) {
     var fcount = 1 * inv_perc;
     if(fcount > 1.017) count = Math.ceil(fcount);
     else               count = Math.floor(fcount);
-    var arrColors = ['rgba(0, 172, 0, 0.8)'];
+    var arrColors = ['rgba(0, 172, 0, 1)'];
     for (var i = 0; i < count; i++) {
-        arrColors.push('rgba(172, 0, 0, 0.8)')
+        arrColors.push('rgba(172, 0, 0, 1)')
     }
     return arrColors;
 }
 
   const simpleGauge = new window.d3SimpleGauge.SimpleGauge({
-    animationDelay: 50,         // The delay in ms before to play the needle animation (optional)
-    animationDuration: 700,    // The duration in ms of the needle animation (optional)
-    needleColor: 'blue', // The needle color
+    animationDelay: 50,                              // The delay in ms before to play the needle animation (optional)
+    animationDuration: 700,                          // The duration in ms of the needle animation (optional)
+    needleColor: 'blue',                             // The needle color
     sectionsColors: PercentageToColors(kpi_value),   // The color of each section
-    barWidth: 20,               // The bar width of the gauge (optional)
-    kpi: kpi_value,
-    chartInset: 0,             // The chart inset to use (optional)
-    easeType: d3.easeElastic,   // The ease type to use with the needle animation (optional)
-    el: svg.append('g'),        // The element that hosts the gauge
-    width: 200,                 // The width of the gauge
-    height: 100,                // The height of the gauge
-    interval: [0, 50],         // The interval (min and max values) of the gauge (optional)
-    needleRadius: 10,            // The radius of the needle (optional)
-    percent: 0.18,               // The initial percentage of he needle (optional)
-    sectionsCount: PercentageToSections(kpi_value),           // The number of sections in the gauge
+    barWidth: 30,                                    // The bar width of the gauge (optional)
+    kpi: kpi_value,                                  // The Gauge KPI limit
+    chartInset: 10,                                   // The chart inset to use (optional)
+    easeType: d3.easeElastic,                        // The ease type to use with the needle animation (optional)
+    el: svg.append('g'),                             // The element that hosts the gauge
+    width: w,                                        // The width of the gauge
+    height: h-30,                                       // The height of the gauge
+    interval: [0, 50],                               // The interval (min and max values) of the gauge (optional)
+    needleRadius: 20,                                // The radius of the needle (optional)
+    percent: 0.18,                                   // The initial percentage of he needle (optional)
+    sectionsCount: PercentageToSections(kpi_value),  // The number of sections in the gauge
 });
 
   d3.select('button')
     .on('click', () => {
       simpleGauge.percent = Math.random();
-      d3.select('#position').text(d3.format(".0%")(simpleGauge.percent));
+      d3.select('#position').text(d3.format(".2%")(simpleGauge.percent));
     });
 </script>
 </body>
