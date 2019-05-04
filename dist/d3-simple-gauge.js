@@ -46,6 +46,10 @@
   var percToRad = function percToRad(perc) {
     return degToRad(percToDeg(perc));
   };
+
+  var radToDeg = function radToDeg(rad) {
+    return rad * 180 / Math.PI;
+  };
   /**
   * Defines the needle used in the gauge.
   */
@@ -101,6 +105,8 @@
 
         this._el.select('.needle').style('fill', color);
 
+        this._el.select('.needle-text').text(Math.floor(percent * 100));
+
         this._el.transition().delay(this._animationDelay).ease(this._easeType).duration(this._animationDuration).selectAll('.needle').tween('progress', function () {
           var thisElement = this;
           var delta = percent - self._percent;
@@ -123,6 +129,8 @@
         this._el.append('circle').attr('class', 'needle-center').attr('cx', 0).attr('cy', 0).attr('r', this._radius);
 
         this._el.append('path').attr('class', 'needle').attr('d', this._getPath(this._percent));
+
+        this._el.append('text').attr('class', 'needle-text').attr('text-anchor', 'middle').attr('font-size', '25pt').attr('y', +10).text(this._kpi);
 
         if (this._kpi / 100 >= this._percent) this._color = 'rgba(0, 172, 0, 1)';else this._color = 'rgba(172, 0, 0, 1)';
 
@@ -202,11 +210,8 @@
 
       if (isNaN(config.height) || config.height <= 0) {
         throw new RangeError('The height must be a positive number.');
-      }
+      } //if (isNaN(config.sectionsCount) || config.sectionsCount <= 0)                                                    { throw new RangeError('The sections count must be a positive number.');                }
 
-      if (isNaN(config.sectionsCount) || config.sectionsCount <= 0) {
-        throw new RangeError('The sections count must be a positive number.');
-      }
 
       if (isNaN(config.width) || config.width <= 0) {
         throw new RangeError('The width must be a positive number.');
@@ -230,11 +235,8 @@
 
       if (config.needleRadius !== undefined && (isNaN(config.needleRadius) || config.needleRadius < 0)) {
         throw new RangeError('The needle radius must be greater or equal to 0.');
-      }
+      } //if (config.sectionsColors !== undefined && config.sectionsColors.length < config.sectionsCount)                  { throw new RangeError('The sectionsColors length must match with the sectionsCount.'); }
 
-      if (config.sectionsColors !== undefined && config.sectionsColors.length < config.sectionsCount) {
-        throw new RangeError('The sectionsColors length must match with the sectionsCount.');
-      }
 
       this._animationDelay = config.animationDelay !== undefined ? config.animationDelay : CONSTANTS.NEEDLE_ANIMATION_DELAY;
       this._animationDuration = config.animationDuration !== undefined ? config.animationDuration : CONSTANTS.NEEDLE_ANIMATION_DURATION;
@@ -250,7 +252,7 @@
       this._needleColor = config.needleColor;
       this._kpi = config.kpi;
       this.interval = config.interval || [0, 1];
-      this.percent = config.percent !== undefined ? config.percent : 0;
+      this.percent = config.percent !== undefined ? config.percent / 100 : 0;
 
       this._initialize();
     }
@@ -274,19 +276,24 @@
 
         var sectionPercentage = 1 / this._sectionsCount / 2;
         var padRad = CONSTANTS.PAD_RAD;
-        var totalPercent = 0.75; // Start at 270deg
-
         var radius = Math.min(this._width, this._height * 2) / 2;
-        this._chart = this._el.append('g').attr('transform', "translate(".concat(this._width / 2, ", ").concat(this._height, ")"));
-        this._arcs = this._chart.selectAll('.arc').data((0, _d3Array.range)(1, this._sectionsCount)).enter().append('path').attr('class', function (sectionIndex) {
+        this._chart = this._el.append('g').attr('transform', "translate(".concat(this._width / 2, ", ").concat(this._height + 2.5, ")"));
+        this._arcs = this._chart.selectAll('.arc').data((0, _d3Array.range)(1, 3)).enter().append('path').attr('class', function (sectionIndex) {
           return "arc chart-color".concat(sectionIndex);
         }).attr('d', function (sectionIndex) {
-          var arcStartRad = percToRad(totalPercent);
-          var arcEndRad = arcStartRad + percToRad(sectionPercentage);
-          console.log('arcEndRad: ' + arcEndRad);
-          totalPercent += sectionPercentage; //const startPadRad = sectionIndex === 0 ? 0 : padRad / 2;
-          //const endPadRad = sectionIndex === this._sectionsCount ? 0 : padRad / 2;
+          if (sectionIndex == 1) {
+            var arcStartRad = degToRad(270); // start at 270°
 
+            var arcEndRad = Math.round((arcStartRad + percToRad(_this._kpi / 100 / 2)) * 10000) / 10000;
+          } else {
+            var arcStartRad = Math.round(degToRad(270 + percToDeg(_this._kpi / 100 / 2)) * 10000) / 10000;
+            var arcEndRad = degToRad(450);
+          }
+
+          console.log('sectionIndex: ' + sectionIndex);
+          console.log('arcStartRad: ' + arcStartRad + ' == ' + radToDeg(arcStartRad));
+          console.log('arcEndRad: ' + arcEndRad + ' == ' + radToDeg(arcEndRad));
+          console.log('KPI: ' + _this._kpi + ' KPI to rad: ' + percToRad(_this._kpi / 100) + ' KPI to deg: ' + percToDeg(_this._kpi / 100) / 2);
           var arc = (0, _d3Shape.arc)().outerRadius(radius - _this._chartInset).innerRadius(radius - _this._chartInset - _this._barWidth).startAngle(arcStartRad - 0.0008).endAngle(arcEndRad + 0.0008);
           return arc(_this);
         });
@@ -294,7 +301,7 @@
         if (this._sectionsColors) {
           this._arcs.style('fill', function (sectionIndex) {
             return _this._sectionsColors[sectionIndex - 1];
-          });
+          }).attr('border', 1).style('stroke', 'black');
         }
 
         this._needle = new Needle({
@@ -340,7 +347,6 @@
       key: "interval",
       get: function get() {
         return this._scale.domain();
-        console.log('jippi');
       }
       /**
       * Sets the interval of the gauge (min and max values).
