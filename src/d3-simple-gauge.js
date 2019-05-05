@@ -28,8 +28,9 @@ const CONSTANTS = {
 };
 
 const percToDeg = perc => perc * 360;
-const degToRad  = deg  => (deg * Math.PI) / 180;
-const percToRad = perc => degToRad(percToDeg(perc));
+const degToRad  = deg  => deg * Math.PI / 180;
+const percToRad = perc => degToRad( percToDeg( perc ) );
+
 const radToDeg  = rad  => rad * 180 / Math.PI;
 
 /**
@@ -76,7 +77,7 @@ class Needle {
         else                              var color = 'rgba(172, 0, 0, 1)';
         this._el.select('.needle-center').style('fill', color);
         this._el.select('.needle').style('fill', color);
-        this._el.select('.needle-text').text( Math.floor( percent * 100 ) );
+        this._el.select('.needle-text').text( Math.floor( percent * 100 ) + '%' );
 
         this._el.transition()
         .delay(this._animationDelay)
@@ -101,37 +102,13 @@ class Needle {
     * @private
     */
     _initialize() {
-        console.log('this._percent: ' + this._percent);
-        this._el.append('circle')
-                .attr('class', 'needle-center')
-                .attr('cx', 0)
-                .attr('cy', 0)
-                .attr('r', this._radius);
-
-        this._el.append('path')
-                .attr('class', 'needle')
-                .attr('d', this._getPath(this._percent));
-
-        this._el.append('text')
-                .attr('class', 'needle-text')
-                .attr('text-anchor', 'middle')
-                .attr('font-size', '25pt')
-                .attr('y', +10)
-                .text(percent);
-
-        if( (this._kpi / 100) >= this._percent) var color = 'rgba(0, 172, 0, 1)';
-        else                                    var color = 'rgba(172, 0, 0, 1)';
-        if (this._color) {
-            this._el.select('.needle-center')
-            .attr('border', 1)
-            .style('fill', color)
-            .style('stroke', 'black');
-
-            this._el.select('.needle')
-            .attr('border', 1)
-            .style('fill', color)
-            .style('stroke', 'black');
-        }
+        this._el.append('circle').attr('class', 'needle-center').attr('cx', 0).attr('cy', 0).attr('r', this._radius);
+        this._el.append('path').attr('class', 'needle').attr('d', this._getPath(this._percent));
+        this._el.append('text').attr('class', 'needle-text').attr('text-anchor', 'middle').attr('font-size', '16pt').style('fill', 'rgb(255,255,0)').attr('y', 10).text( Math.floor( this._percent * 100 ) + '%' );
+        if( (this._kpi / 100) >= this._percent) var needleColor = 'rgba(0, 172, 0, 1)';
+        else                                    var needleColor = 'rgba(172, 0, 0, 1)';
+        this._el.select('.needle-center').style('fill', needleColor);
+        this._el.select('.needle').style('fill', needleColor);
     }
 
     /**
@@ -192,6 +169,9 @@ export class SimpleGauge {
     constructor(config) {
         if (!config.el)                                                                                                  { throw new Error('The element must be valid.');                                        }
         if (isNaN(config.height) || config.height <= 0)                                                                  { throw new RangeError('The height must be a positive number.');                        }
+
+        //if (isNaN(config.sectionsCount) || config.sectionsCount <= 0)                                                    { throw new RangeError('The sections count must be a positive number.');                }
+
         if (isNaN(config.width) || config.width <= 0)                                                                    { throw new RangeError('The width must be a positive number.');                         }
         if (config.animationDelay !== undefined && (isNaN(config.animationDelay) || config.animationDelay < 0))          { throw new RangeError('The transition delay must be greater or equal to 0.');          }
         if (config.animationDuration !== undefined && (isNaN(config.animationDuration) || config.animationDuration < 0)) { throw new RangeError('The transition duration must be greater or equal to 0.');       }
@@ -199,7 +179,6 @@ export class SimpleGauge {
         if (config.chartInset !== undefined && (isNaN(config.chartInset) || config.chartInset < 0))                      { throw new RangeError('The chart inset must be greater or equal to 0.');               }
         if (config.needleRadius !== undefined && (isNaN(config.needleRadius) || config.needleRadius < 0))                { throw new RangeError('The needle radius must be greater or equal to 0.');             }
 
-        //if (isNaN(config.sectionsCount) || config.sectionsCount <= 0)                                                    { throw new RangeError('The sections count must be a positive number.');                }
         //if (config.sectionsColors !== undefined && config.sectionsColors.length < config.sectionsCount)                  { throw new RangeError('The sectionsColors length must match with the sectionsCount.'); }
 
         this._animationDelay    = (config.animationDelay !== undefined)    ? config.animationDelay    : CONSTANTS.NEEDLE_ANIMATION_DELAY;
@@ -210,10 +189,10 @@ export class SimpleGauge {
         this._el                = config.el;
         this._height            = config.height;
         this._needleRadius      = (config.needleRadius !== undefined) ? config.needleRadius : CONSTANTS.NEEDLE_RADIUS;
-        //this._sectionsCount     = config.sectionsCount;
+        this._sectionsCount     = config.sectionsCount;
         this._width             = config.width;
         this._sectionsColors    = config.sectionsColors;
-        this._needleColor       = config.needleColor;
+        //this._needleColor       = config.needleColor;
         this._kpi               = config.kpi;
         this.interval           = config.interval || [0, 1];
         this.percent            = (config.percent !== undefined) ? config.percent / 100 : 0;
@@ -278,35 +257,43 @@ export class SimpleGauge {
     * @private
     */
     _initialize() {
+
         const radius = Math.min(this._width, this._height * 2) / 2;
-        this._chart = this._el.append('g').attr('transform', `translate(${this._width / 2}, ${this._height+2.5})`);
+
+        this._chart = this._el.append('g').attr('transform', `translate(${this._width / 2}, ${this._height-10})`);
+
         this._arcs = this._chart.selectAll('.arc')
-                                .data(range(1, 2)) // two arcs one for the KPI percentage green values, and the rest for values outside the KPI red values
+
+                                .data(range(1, 3)) // two arcs one for the KPI percentage green values, and the rest for values outside the KPI red values
                                 .enter()
+
                                 .append('path')
                                 .attr('class', sectionIndex => `arc chart-color${sectionIndex}`)
                                 .attr('d', sectionIndex => {
+
+
                                     if(sectionIndex == 1){ // Green value arc
-                                        var arcStartRad = degToRad(270); // start at 270°
-                                        var arcEndRad   = Math.round((arcStartRad + percToRad(this._kpi/100/2))); 
+                                        var arcStartRad = degToRad( 270 ); // start at 270°
+                                        var arcEndRad   = degToRad( 270 + percToDeg( this._kpi/100/2 ) ); 
                                     }
                                     else{                  // Red value arc
-                                        var arcStartRad = Math.round(degToRad(270 + percToDeg(this._kpi/100/2)));
-                                        var arcEndRad   = degToRad(450); // end at 450°
+                                        var arcStartRad = degToRad( 270 + percToDeg( this._kpi/100/2 ) );
+                                        var arcEndRad   = degToRad( 450 );
                                     }
+
                                     const arc = d3Arc()
                                         .outerRadius(radius - this._chartInset)
                                         .innerRadius(radius - this._chartInset - this._barWidth)
-                                        .startAngle(arcStartRad);
+                                        .startAngle(arcStartRad)
                                         .endAngle(arcEndRad);
+
                                     return arc(this);
                                 });
 
         if (this._sectionsColors) {
-            this._arcs.style('fill', sectionIndex => this._sectionsColors[sectionIndex - 1])
-            .attr('border', 1)
-            .style('stroke', 'black');
+            this._arcs.style('fill', sectionIndex => this._sectionsColors[sectionIndex - 1]);
         }
+
         this._needle = new Needle({
                                 animationDelay: this._animationDelay,
                                 animationDuration: this._animationDuration,
@@ -314,7 +301,7 @@ export class SimpleGauge {
                                 easeType: this._easeType,
                                 el: this._chart,
                                 kpi: this._kpi,
-                                length: (this._height - this._chartInset * 1.2) * 0.9,
+                                length: radius - this._chartInset - this._barWidth - 5,
                                 percent: this._percent,
                                 radius: this._needleRadius
                             });

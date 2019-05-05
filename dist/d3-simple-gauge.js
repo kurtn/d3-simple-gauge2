@@ -31,7 +31,6 @@
     NEEDLE_ANIMATION_DELAY: 0,
     NEEDLE_ANIMATION_DURATION: 3000,
     NEEDLE_RADIUS: 15,
-    PAD_RAD: 0,
     KPI: 25
   };
 
@@ -105,7 +104,7 @@
 
         this._el.select('.needle').style('fill', color);
 
-        this._el.select('.needle-text').text(Math.floor(percent * 100));
+        this._el.select('.needle-text').text(Math.floor(percent * 100) + '%');
 
         this._el.transition().delay(this._animationDelay).ease(this._easeType).duration(this._animationDuration).selectAll('.needle').tween('progress', function () {
           var thisElement = this;
@@ -130,15 +129,13 @@
 
         this._el.append('path').attr('class', 'needle').attr('d', this._getPath(this._percent));
 
-        this._el.append('text').attr('class', 'needle-text').attr('text-anchor', 'middle').attr('font-size', '25pt').attr('y', +10).text(this._kpi);
+        this._el.append('text').attr('class', 'needle-text').attr('text-anchor', 'middle').attr('font-size', '16pt').style('fill', 'rgb(255,255,0)').attr('y', 10).text(Math.floor(this._percent * 100) + '%');
 
-        if (this._kpi / 100 >= this._percent) this._color = 'rgba(0, 172, 0, 1)';else this._color = 'rgba(172, 0, 0, 1)';
+        if (this._kpi / 100 >= this._percent) var needleColor = 'rgba(0, 172, 0, 1)';else var needleColor = 'rgba(172, 0, 0, 1)';
 
-        if (this._color) {
-          this._el.select('.needle-center').attr('border', 1).style('fill', this._color).style('stroke', 'black');
+        this._el.select('.needle-center').style('fill', needleColor);
 
-          this._el.select('.needle').attr('border', 1).style('fill', this._color).style('stroke', 'black');
-        }
+        this._el.select('.needle').style('fill', needleColor);
       }
       /**
       * Gets the needle path based on the percent specified.
@@ -248,8 +245,8 @@
       this._needleRadius = config.needleRadius !== undefined ? config.needleRadius : CONSTANTS.NEEDLE_RADIUS;
       this._sectionsCount = config.sectionsCount;
       this._width = config.width;
-      this._sectionsColors = config.sectionsColors;
-      this._needleColor = config.needleColor;
+      this._sectionsColors = config.sectionsColors; //this._needleColor       = config.needleColor;
+
       this._kpi = config.kpi;
       this.interval = config.interval || [0, 1];
       this.percent = config.percent !== undefined ? config.percent / 100 : 0;
@@ -274,34 +271,31 @@
       value: function _initialize() {
         var _this = this;
 
-        var sectionPercentage = 1 / this._sectionsCount / 2;
-        var padRad = CONSTANTS.PAD_RAD;
         var radius = Math.min(this._width, this._height * 2) / 2;
-        this._chart = this._el.append('g').attr('transform', "translate(".concat(this._width / 2, ", ").concat(this._height + 2.5, ")"));
-        this._arcs = this._chart.selectAll('.arc').data((0, _d3Array.range)(1, 3)).enter().append('path').attr('class', function (sectionIndex) {
+        this._chart = this._el.append('g').attr('transform', "translate(".concat(this._width / 2, ", ").concat(this._height - 10, ")"));
+        this._arcs = this._chart.selectAll('.arc').data((0, _d3Array.range)(1, 3)) // two arcs one for the KPI percentage green values, and the rest for values outside the KPI red values
+        .enter().append('path').attr('class', function (sectionIndex) {
           return "arc chart-color".concat(sectionIndex);
         }).attr('d', function (sectionIndex) {
           if (sectionIndex == 1) {
+            // Green value arc
             var arcStartRad = degToRad(270); // start at 270°
 
-            var arcEndRad = Math.round((arcStartRad + percToRad(_this._kpi / 100 / 2)) * 10000) / 10000;
+            var arcEndRad = degToRad(270 + percToDeg(_this._kpi / 100 / 2));
           } else {
-            var arcStartRad = Math.round(degToRad(270 + percToDeg(_this._kpi / 100 / 2)) * 10000) / 10000;
+            // Red value arc
+            var arcStartRad = degToRad(270 + percToDeg(_this._kpi / 100 / 2));
             var arcEndRad = degToRad(450);
           }
 
-          console.log('sectionIndex: ' + sectionIndex);
-          console.log('arcStartRad: ' + arcStartRad + ' == ' + radToDeg(arcStartRad));
-          console.log('arcEndRad: ' + arcEndRad + ' == ' + radToDeg(arcEndRad));
-          console.log('KPI: ' + _this._kpi + ' KPI to rad: ' + percToRad(_this._kpi / 100) + ' KPI to deg: ' + percToDeg(_this._kpi / 100) / 2);
-          var arc = (0, _d3Shape.arc)().outerRadius(radius - _this._chartInset).innerRadius(radius - _this._chartInset - _this._barWidth).startAngle(arcStartRad - 0.0008).endAngle(arcEndRad + 0.0008);
+          var arc = (0, _d3Shape.arc)().outerRadius(radius - _this._chartInset).innerRadius(radius - _this._chartInset - _this._barWidth).startAngle(arcStartRad).endAngle(arcEndRad);
           return arc(_this);
         });
 
         if (this._sectionsColors) {
           this._arcs.style('fill', function (sectionIndex) {
             return _this._sectionsColors[sectionIndex - 1];
-          }).attr('border', 1).style('stroke', 'black');
+          });
         }
 
         this._needle = new Needle({
@@ -311,7 +305,7 @@
           easeType: this._easeType,
           el: this._chart,
           kpi: this._kpi,
-          length: (this._height - this._chartInset * 1.2) * 0.9,
+          length: radius - this._chartInset - this._barWidth - 5,
           percent: this._percent,
           radius: this._needleRadius
         });
@@ -332,8 +326,6 @@
         if (!this._arcs) {
           return;
         }
-
-        console.log(this._arcs);
 
         this._arcs.classed('active', function (d, i) {
           return i === Math.floor(_this2._percent * _this2._sectionsCount) || i === _this2._arcs.size() - 1 && _this2._percent === 1;
