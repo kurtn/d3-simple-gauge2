@@ -8,6 +8,13 @@
 * the code to make it more flexible.
 *
 * Thanks to the original author for its work.
+*
+* gulp requires CLI version 2.1.0, to secure this run gulp as follows
+*
+./node_modules/gulp/bin/gulp.js
+* 
+* the above gulp command will run as watcher.
+* 
 */
 
 import 'd3-transition';
