@@ -98,7 +98,7 @@
       value: function update(percent) {
         var self = this; // change color if needle (data) is below kpi
 
-        if (this._kpi / 100 >= percent) var color = 'rgba(0, 172, 0, 1)';else var color = 'rgba(172, 0, 0, 1)';
+        if (this._kpi / 100 >= percent) var color = this._color[0];else var color = this._color[1];
 
         this._el.select('.needle-center').style('fill', color);
 
@@ -131,7 +131,10 @@
 
         this._el.append('text').attr('class', 'needle-text').attr('text-anchor', 'middle').attr('font-size', '16pt').style('fill', 'rgb(255,255,0)').attr('y', 10).text(Math.floor(this._percent * 100) + '%');
 
-        if (this._kpi / 100 >= this._percent) var needleColor = 'rgba(0, 172, 0, 1)';else var needleColor = 'rgba(172, 0, 0, 1)';
+        console.log(this._color);
+        console.log(this._color[0]);
+        console.log(this._color[1]);
+        if (this._kpi / 100 >= this._percent) var needleColor = this._color[0];else var needleColor = this._color[1];
 
         this._el.select('.needle-center').style('fill', needleColor);
 
@@ -245,8 +248,8 @@
       this._needleRadius = config.needleRadius !== undefined ? config.needleRadius : CONSTANTS.NEEDLE_RADIUS;
       this._sectionsCount = config.sectionsCount;
       this._width = config.width;
-      this._sectionsColors = config.sectionsColors; //this._needleColor       = config.needleColor;
-
+      this._sectionsColors = config.sectionsColors;
+      this._needleColor = config.needleColor;
       this._kpi = config.kpi;
       this.interval = config.interval || [0, 1];
       this.percent = config.percent !== undefined ? config.percent / 100 : 0;
