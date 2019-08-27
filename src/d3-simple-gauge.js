@@ -113,10 +113,6 @@ class Needle {
         this._el.append('path').attr('class', 'needle').attr('d', this._getPath(this._percent));
         this._el.append('text').attr('class', 'needle-text').attr('text-anchor', 'middle').attr('font-size', '16pt').style('fill', 'rgb(255,255,0)').attr('y', 10).text( Math.floor( this._percent * 100 ) + '%' );
 
-        console.log(this._color);
-        console.log(this._color[0]);
-        console.log(this._color[1]);
-
         if( (this._kpi / 100) >= this._percent) var needleColor = this._color[0];
         else                                    var needleColor = this._color[1];
 
