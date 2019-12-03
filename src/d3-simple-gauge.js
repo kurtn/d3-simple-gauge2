@@ -306,7 +306,7 @@ export class SimpleGauge {
         this._needle = new Needle({
                                 animationDelay: this._animationDelay,
                                 animationDuration: this._animationDuration,
-                                color: ['rgba(172, 172, 0, 1)','rgba(225, 255, 0, 1)'],
+                                color: this._needleColor,
                                 easeType: this._easeType,
                                 el: this._chart,
                                 kpi: this._kpi,
