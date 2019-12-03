@@ -10,7 +10,7 @@
     factory(mod.exports, global.d3, global.d3, global.d3, global.d3, global.d3, global.d3);
     global.d3SimpleGauge = mod.exports;
   }
-})(this, function (_exports, _d3Transition, _d3Shape, _d3Ease, _d3Array, _d3Scale, _d3Selection) {
+})(typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : this, function (_exports, _d3Transition, _d3Shape, _d3Ease, _d3Array, _d3Scale, _d3Selection) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
