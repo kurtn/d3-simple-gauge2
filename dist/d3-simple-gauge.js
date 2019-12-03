@@ -301,7 +301,7 @@
         this._needle = new Needle({
           animationDelay: this._animationDelay,
           animationDuration: this._animationDuration,
-          color: this._needleColor,
+          color: ['rgba(172, 172, 0, 1)', 'rgba(225, 255, 0, 1)'],
           easeType: this._easeType,
           el: this._chart,
           kpi: this._kpi,
