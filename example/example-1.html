@@ -19,13 +19,14 @@
                 <button>Change</button>
                 <p></p>
             </div>
+
         <article>
             <div>
                 
             </div>
         </article>
-        <script type="text/javascript" src="../node_modules/d3/dist/d3.js"></script>
-        <script type="text/javascript" src="../dist/d3-simple-gauge.js"></script>
+        <script type="text/javascript" src="/node_modules/d3/dist/d3.js"></script>
+        <script type="text/javascript" src="/dist/d3-simple-gauge.js"></script>
         <script>
 
             var w = 300;
@@ -49,7 +50,7 @@
                         el: svg.append('g'),                                         // The element that hosts the gauge
                         width: w,                                                    // The width of the gauge
                         height: h-30,                                                // The height of the gauge (-30 y offset)
-                        interval: [0, 500],                                           // The interval (min and max values) of the gauge (optional)
+                        interval: [0, 500],                                          // The interval (min and max values) of the gauge (optional)
                         kpi: kpi_value,                                              // The Gauge KPI limit
                         percent: value_percent,                                      // The initial percentage of he needle
                         needleColor:    ['rgba(0, 172, 0, 1)','rgba(225, 0, 0, 1)'], // The needle color

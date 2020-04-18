@@ -6,10 +6,13 @@
         <style>
             * { box-sizing: border-box; }
             body { margin: 0; font-family: 'Arial', sans-serif; text-align: center; }
+            .box-shadow {
+              border-radius: 25px;
+              box-shadow: 2px 2px 3px grey;
+            }
         </style>
 	</head>
 	<body>
-		<article>
 			<h1>D3 Simple Gauge</h1>
 			<div>
 			<p> Needle position: <strong id="position">50%</strong> </p>
@@ -17,57 +20,42 @@
 			<p><small>Colors are defined with <em>needleColor</em> and <em>sectionsColors</em> properties.</small></p>
 			<p><small>Chart inset (margins in the SVG) is defined with <em>chartInset</em> property.</small></p>
 			</div>
+		<article>
+            <div>
+                
+            </div>
 		</article>
 		<script type="text/javascript" src="../node_modules/d3/dist/d3.min.js"></script>
 		<script type="text/javascript" src="../dist/d3-simple-gauge.js"></script>
 		<script>
-			var w = 500;
-			var h = 250;
-			var border=1;
-			var bordercolor='black';
-			const svg = d3.select('body > article').append('svg').attr('width', w).attr('height', h).attr("border",border);
-			var borderPath = svg.append("rect").attr("x", 0).attr("y", 0).attr("width", w).attr("height", h).style("stroke", bordercolor).style("fill", "none").style("stroke-width", border);
-			var kpi_value = 18;
-			function PercentageToSections(perc) {
-				var inv_perc = 1 / (perc / 100);
-				var count = 1 * inv_perc;
-				console.log( perc );
-				console.log( inv_perc );
-				console.log( 'sections count: ' + count );
-				return count;
-			}
-			function PercentageToColors(perc) {
-				var inv_perc = 1 / (perc / 100);
-				var fcount = 1 * inv_perc;
-				if(fcount > 1.017) count = Math.ceil(fcount);
-				else               count = Math.floor(fcount);
-				var arrColors = ['rgba(0, 172, 0, 1)'];
-				for (var i = 0; i < count; i++) {
-					arrColors.push('rgba(172, 0, 0, 1)')
-				}
-				return arrColors;
-			}
-			const simpleGauge = new window.d3SimpleGauge.SimpleGauge({
-    animationDelay: 0,          // The delay in ms before to play the needle animation (optional)
-    animationDuration: 3000,    // The duration in ms of the needle animation (optional)
-    barWidth: 40,               // The bar width of the gauge (optional)
-    chartInset : 50,            // The chart inset (margin),
-    easeType: d3.easeElastic,   // The ease type to use with the needle animation (optional)
-    el: svg.append('g'),        // The element that hosts the gauge
-    height: 200,                // The height of the gauge
-    interval: [0, 200],         // The interval (min and max values) of the gauge (optional)
-    needleRadius: 15,           // The radius of the needle (optional)
-    needleColor : 'black',      // The needle color,
-    percent: 0.5,               // The initial percentage of he needle (optional)
-    sectionsColors: [           // The color of each section
-      'green',
-      'orange',
-      'red'
-    ],
-    sectionsCount: 3,           // The number of sections in the gauge
-    width: 400                  // The width of the gauge,
-			});
 
+            var w = 300;
+            var h = 200;
+            var border=3;
+            var bordercolor = 'rgb(155, 153, 149)';
+            var fillcolor   = 'rgb(245, 241, 234)';
+            const svg = d3.select('article > div').append('svg').attr('width', w).attr('height', h).style('fill',fillcolor);
+            var borderPath = svg.append("rect").attr("width", w-10).attr("height", h-10).attr("rx", 25).attr("ry", 25).attr("x", 5).attr("y", 5).style("stroke", bordercolor).style("fill", "rgb(245, 241, 234)").style("stroke-width", border);
+
+            var kpi_value = 15;
+            var value_percent = 21;
+
+			const simpleGauge = new window.d3SimpleGauge.SimpleGauge({
+					    animationDelay: 100,                                         // The delay in ms before to play the needle animation (optional)
+					    animationDuration: 800,                                      // The duration in ms of the needle animation (optional)
+					    easeType: d3.easeElastic,                                    // The ease type to use with the needle animation (optional)
+					    barWidth: 20,                                                // The bar width of the gauge (optional)
+					    needleRadius: 15,                                            // The radius of the needle (optional)
+					    chartInset: 8,                                               // The chart inset (margin),
+					    el: svg.append('g'),                                         // The element that hosts the gauge
+                        width: w,                                                    // The width of the gauge
+					    height: h-30,                                                // The height of the gauge
+					    interval: [0, 500],                                          // The interval (min and max values) of the gauge (optional)
+                        kpi: kpi_value,                                              // The Gauge KPI limit
+                        percent: value_percent,                                      // The initial percentage of he needle
+                        needleColor:    ['rgba(0, 172, 0, 1)','rgba(225, 0, 0, 1)'], // The needle color
+                        sectionsColors: ['rgba(0, 172, 0, 1)','rgba(225, 0, 0, 1)'], // The archs sections colors (in my simpler version it only has two colors for the two sections)
+			});
 			d3.select('button').on('click', () => {
 				simpleGauge.percent = Math.random();
 				d3.select('#position').text(d3.format(".0%")(simpleGauge.percent));

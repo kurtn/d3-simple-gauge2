@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kurtn/d3-simple-gauge2"
+    "url": "git+https://github.com/kurtn/d3-simple-gauge2.git"
   },
   "keywords": [
     "gauge",
@@ -47,5 +47,10 @@
     "pump": "^3.0.0",
     "random-number": "0.0.9",
     "should": "^13.2.3"
+  },
+  "directories": {
+    "doc": "doc",
+    "example": "example",
+    "test": "test"
   }
 }
