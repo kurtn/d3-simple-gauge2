@@ -1,4 +1,4 @@
-This project has moved to d3-kpi-gauge
+This project has moved to [d3-kpi-gauge](https://github.com/kurtn/d3-kpi-gauge)
 ===============
 
 D3 Simple Gauge
