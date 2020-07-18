@@ -1,5 +1,3 @@
-This project has moved to d3-kpi-gauge
-
 D3 Simple Gauge
 ===============
 [![Build Status](https://travis-ci.org/antoinebeland/d3-simple-gauge.svg?branch=master)](https://travis-ci.org/antoinebeland/d3-simple-gauge)
